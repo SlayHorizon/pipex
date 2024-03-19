@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tschneid <tschneid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:22:00 by atreus            #+#    #+#             */
-/*   Updated: 2024/03/15 15:08:34 by tschneid         ###   ########.fr       */
+/*   Updated: 2024/03/19 23:27:47 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	exit_on_error(char *error_message)
+	//write(2, RED_COLOR, ft_strlen(RED_COLOR));
+	//write(2, "Error\n", 7);
+void	exit_on_error(char *error_message, int exit_code)
 {
-	write(2, RED_COLOR, ft_strlen(RED_COLOR));
-	write(2, "Error\n", 7);
 	write(2, error_message, ft_strlen(error_message));
-	exit(EXIT_FAILURE);
+	exit(exit_code);
 }
 
 char	*find_path(char *cmd, char **envp)
@@ -37,7 +37,7 @@ char	*find_path(char *cmd, char **envp)
 		part_path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
-		if (access(path, F_OK) == 0)
+		if (access(path, F_OK | X_OK) == 0)
 		{
 			free_split(paths);
 			return (path);
@@ -55,20 +55,23 @@ void	execute(char *argv, char **envp)
 	char	**cmd;
 
 	cmd = ft_split(argv, ' ');
-	path = find_path(cmd[0], envp);
-	if (!path)
+	if (!cmd)
+		return ;
+	if (access(cmd[0], F_OK | X_OK) != 0)
 	{
-		free_split(cmd);
-		exit_on_error(COMD_ERROR);
-	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		free(path);
-		free_split(cmd);
-		exit_on_error(EXEC_ERROR);
+		path = find_path(cmd[0], envp);
+		if (!path)
+		{
+			free_split(cmd);
+			exit_on_error(COMD_ERROR, NOT_FOUND_CODE);
+		}
 	}
 	else
-		free(path);
+		path = cmd[0];
+	if (execve(path, cmd, envp) == -1)
+		exit_on_error(EXEC_ERROR, EXIT_FAILURE);
+	free(path);
+	free_split(cmd);
 }
 
 int	get_next_line(char **line)
@@ -94,7 +97,6 @@ int	get_next_line(char **line)
 	buffer[i] = '\n';
 	buffer[++i] = '\0';
 	*line = buffer;
-	printf("line = %s\n", buffer);
 	free(buffer);
 	return (r);
 }
