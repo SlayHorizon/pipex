@@ -1,6 +1,9 @@
 42 school project
 
-Program to imitate the use of pipe in bash commands.
+Project to imitate in C the use of pipe in shell commands.
 
-Like the command: `< infile grep Hello | wc -l > outfile`
-should do the same as my program by doing: `./pipex infile "grep Hello" "wc -l" outfile`.
+Format:  
+`./pipex infile cmd1 cmd2 outfile`
+
+Example:  
+`< infile grep Hello | wc -l > outfile` == `./pipex infile "grep Hello" "wc -l" outfile`.
