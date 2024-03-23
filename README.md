@@ -1,9 +1,9 @@
-42 school project
+## 42 school project - Pipex
 
 Project to imitate in C the use of pipe in shell commands.
 
-Format:  
+**Program arguments format:**  
 `./pipex infile cmd1 cmd2 outfile`
 
-Example:  
+**Example:**  
 `< infile grep Hello | wc -l > outfile` == `./pipex infile "grep Hello" "wc -l" outfile`.
