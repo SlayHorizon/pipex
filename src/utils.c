@@ -6,18 +6,58 @@
 /*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 13:22:00 by atreus            #+#    #+#             */
-/*   Updated: 2024/03/19 23:27:47 by atreus           ###   ########.fr       */
+/*   Updated: 2024/03/27 23:43:14 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-	//write(2, RED_COLOR, ft_strlen(RED_COLOR));
-	//write(2, "Error\n", 7);
-void	exit_on_error(char *error_message, int exit_code)
+int	is_empty_string(const char *str)
 {
-	write(2, error_message, ft_strlen(error_message));
-	exit(exit_code);
+	if (str == NULL)
+		return (1);
+	while (*str)
+	{
+		if (*str != ' ' || *str != '\n')
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+int	is_absolue_path(const char *path)
+{
+	size_t	len;
+
+	if (!path)
+		return (0);
+	len = ft_strlen(path);
+	if (len > 2)
+		if (path[0] == '.' && path[1] == '/')
+			return (1);
+	if (path[0] == '/')
+		return (1);
+	while (*path)
+	{
+		if (*path == '/')
+			return (1);
+		path++;
+	}
+	return (0);
+}
+
+int	get_path(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 char	*find_path(char *cmd, char **envp)
@@ -27,9 +67,9 @@ char	*find_path(char *cmd, char **envp)
 	char	*path;
 	char	*part_path;
 
-	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
+	i = get_path(envp);
+	if (i == -1)
+		return (0);
 	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
@@ -49,31 +89,6 @@ char	*find_path(char *cmd, char **envp)
 	return (0);
 }
 
-void	execute(char *argv, char **envp)
-{
-	char	*path;
-	char	**cmd;
-
-	cmd = ft_split(argv, ' ');
-	if (!cmd)
-		return ;
-	if (access(cmd[0], F_OK | X_OK) != 0)
-	{
-		path = find_path(cmd[0], envp);
-		if (!path)
-		{
-			free_split(cmd);
-			exit_on_error(COMD_ERROR, NOT_FOUND_CODE);
-		}
-	}
-	else
-		path = cmd[0];
-	if (execve(path, cmd, envp) == -1)
-		exit_on_error(EXEC_ERROR, EXIT_FAILURE);
-	free(path);
-	free_split(cmd);
-}
-
 int	get_next_line(char **line)
 {
 	char	*buffer;
@@ -83,7 +98,7 @@ int	get_next_line(char **line)
 
 	i = 0;
 	r = 0;
-	buffer = malloc(10000);
+	buffer = malloc(1);
 	if (!buffer)
 		return (-1);
 	r = read(0, &c, 1);

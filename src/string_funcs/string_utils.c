@@ -6,7 +6,7 @@
 /*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 14:35:23 by atreus            #+#    #+#             */
-/*   Updated: 2024/03/19 23:27:44 by atreus           ###   ########.fr       */
+/*   Updated: 2024/03/27 23:43:18 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (tab);
 }
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	if (!*little || !little)
-		return ((char *) big);
-	if (len == 0)
+	if (n == 0)
 		return (0);
-	while (big[i] && i < len)
-	{
-		j = 0;
-		while (big[i + j] == little[j] && i + j < len)
-		{
-			if (little[j + 1] == '\0')
-				return ((char *) big + i);
-			j++;
-		}
+	while (s1[i] && s1[i] == s2[i] && --n)
 		i++;
-	}
-	return (0);
+	return ((unsigned char)(s1[i]) - (unsigned char)(s2[i]));
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)

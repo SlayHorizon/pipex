@@ -6,7 +6,7 @@
 /*   By: atreus <atreus@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 15:43:59 by atreus            #+#    #+#             */
-/*   Updated: 2024/03/19 23:27:43 by atreus           ###   ########.fr       */
+/*   Updated: 2024/03/27 23:43:19 by atreus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,3 @@ char	**ft_split(char const *str, char c)
 	tab[i] = NULL;
 	return (tab);
 }
-
-/* int	main(int argc, char **argv)
-{
-	char	**result;
-
-	result = ft_split(argv[1], ' ');
-	size_t i = 0;
-	while (result[i])
-		printf("result = %s\n", result[i++]);
-	free_split(result);
-	return (0);
-} */

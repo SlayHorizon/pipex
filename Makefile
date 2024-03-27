@@ -7,7 +7,7 @@ OBJ_DIR = obj
 
 
 SRC = $(addprefix $(SRC_DIR)/, \
-	pipex.c utils.c) \
+	pipex.c utils.c error.c) \
 	$(addprefix $(STR_DIR)/, \
 	string_utils.c ft_split.c)
 
