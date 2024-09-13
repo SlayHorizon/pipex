@@ -1,9 +1,11 @@
 ## Pipex
 
-Project to imitate in C the use of pipe in shell commands.
+Exercice project to learn C.  
+The exercice is to imitate in C the use of pipe as the next shell command:  
+`< file1 cmd1 | cmd2 > file2`
 
-**Program arguments format:**
+**Program arguments format:**  
 `./pipex infile cmd1 cmd2 outfile`
 
-**Example:**
+**Example:**  
 `< infile grep Hello | wc -l > outfile` == `./pipex infile "grep Hello" "wc -l" outfile`.
