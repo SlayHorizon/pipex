@@ -1,3 +1,6 @@
+> [!NOTE]  
+> This repo is only public so I can easily share it with schoolmates and access it from anywhere, just for my own use.
+
 ## Pipex
 
 Exercice project to learn C.  
